@@ -139,17 +139,9 @@
     </Compile>
     <Compile Include="MfpSiteParser\MyFitnessPalDay.cs" />
     <Compile Include="MfpSiteParser\MyFitnessPalDayController.cs" />
-    <Compile Include="Migrations\202102271751227_fooditemtype.cs" />
-    <Compile Include="Migrations\202102271751227_fooditemtype.Designer.cs">
-      <DependentUpon>202102271751227_fooditemtype.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202102271757088_fooditemtype1.cs" />
-    <Compile Include="Migrations\202102271757088_fooditemtype1.Designer.cs">
-      <DependentUpon>202102271757088_fooditemtype1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202102280747068_fooditem.cs" />
-    <Compile Include="Migrations\202102280747068_fooditem.Designer.cs">
-      <DependentUpon>202102280747068_fooditem.cs</DependentUpon>
+    <Compile Include="Migrations\202102282320574_fooditem.cs" />
+    <Compile Include="Migrations\202102282320574_fooditem.Designer.cs">
+      <DependentUpon>202102282320574_fooditem.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\FoodDatabaseContext.cs" />
@@ -254,14 +246,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202102271751227_fooditemtype.resx">
-      <DependentUpon>202102271751227_fooditemtype.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202102271757088_fooditemtype1.resx">
-      <DependentUpon>202102271757088_fooditemtype1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202102280747068_fooditem.resx">
-      <DependentUpon>202102280747068_fooditem.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202102282320574_fooditem.resx">
+      <DependentUpon>202102282320574_fooditem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

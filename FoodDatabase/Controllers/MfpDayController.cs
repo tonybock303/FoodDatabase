@@ -131,6 +131,10 @@ namespace FoodDatabase.Controllers
                 if (matches.Count == 1)
                 {
                     model.FoodItemMatch = matches.First();
+                    if (model.FoodItem.OriginalQuantity < model.FoodItem.Quantity)
+                    {
+                        model.FoodItem.SetAsOriginal();
+                    }
                 }
                 if (matches.Count > 1)
                 {
