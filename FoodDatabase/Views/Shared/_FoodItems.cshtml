@@ -1,0 +1,143 @@
+﻿@model IEnumerable<FoodDatabase.Models.FoodItems.FoodItem>
+
+<style>
+    .foodItem {
+        text-align: center;
+        vertical-align:middle;
+        font-size: medium;
+    }
+    .headings {
+        text-align: center;
+        vertical-align: bottom;
+    }
+    .name {
+        width: 340px;
+        text-align: left;
+    }
+    .brand {
+        text-align: left;
+        font-size: small;
+    }
+    .unit {
+        width: 80px;
+        font-size: small;
+    }
+    .macros {
+        width: 30px;
+    }
+    .calories {
+        
+    }
+    .carbs {
+        color:green;
+    }
+    .fats{
+        color:wheat;
+    }
+    .protein{
+        color:red;
+    }
+    .fibre{
+        color:brown;
+    }
+    .glycemicIndex{
+        color:blue;
+    }
+    .typeName {
+        width: 120px;
+        font-size: small;
+    }
+    .foodCategory {
+        width: 120px;
+        font-size: small;
+    }
+    .controls {
+        width: 180px;
+        font-size: small;
+    }
+    .totals {
+        font-size: 14px;
+        border:5px 0px solid black;
+    }
+</style>
+
+
+<table class="table">
+    <tr>
+        <th class="headings">
+            Brand / Name
+        </th>
+        <th class="headings">
+            @Html.DisplayNameFor(model => model.Unit)
+        </th>
+        <th class="headings">
+            Cals
+        </th>
+        <th class="headings">
+            Carbs
+        </th>
+        <th class="headings">
+            Fat
+        </th>
+        <th class="headings">
+            Pro
+        </th>
+        <th class="headings">
+            Fibre
+        </th>
+        <th class="headings">
+            GI
+        </th>
+        <th class="headings">
+            @Html.DisplayNameFor(model => model.GetCategory().FoodCategory)
+        </th>
+        <th class="headings">
+            Type
+        </th>
+        <th class="headings">
+
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="name foodItem">
+                @Html.DisplayFor(modelItem => item.Name)<span class="brand">, @Html.DisplayFor(modelItem => item.Brand)</span>
+            </td>
+            <td class="unit foodItem">
+                @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td class="calories foodItem macros">
+                @Html.DisplayFor(modelItem => item.Calories)
+            </td>
+            <td class="carbs foodItem macros">
+                @Html.DisplayFor(modelItem => item.Carbs)
+            </td> 
+            <td class="fats foodItem macros">
+                @Html.DisplayFor(modelItem => item.Fats)
+            </td>
+            <td class="protein foodItem macros">
+                @Html.DisplayFor(modelItem => item.Protein)
+            </td>
+            <td class="fibre foodItem macros">
+                @Html.DisplayFor(modelItem => item.Fibre)
+            </td>
+            <td class="glycemicIndex foodItem macros">
+                @Html.DisplayFor(modelItem => item.GlycemicIndex)
+            </td>
+            <td class="foodCategory foodItem">
+                @Html.DisplayFor(modelItem => item.GetCategory().FoodCategory)
+            </td>
+            <td class="typeName foodItem">
+                @Html.DisplayFor(modelItem => item.GetFoodItemType().TypeName)
+            </td>
+            <td class="controls foodItem">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+        
+    }
+</table>

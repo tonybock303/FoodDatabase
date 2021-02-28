@@ -1,0 +1,431 @@
+﻿@model FoodDatabase.Models.FoodItems.FoodItemViewModel
+@using Newtonsoft.Json;
+
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    ViewBag.Title = "Update";
+    var foodItemTypes = JsonConvert.SerializeObject(Model.FoodItemTypes);
+}
+
+<h2>Update</h2>
+<style>
+    .colorda {
+        color:orange;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.FoodItem.Id)
+        <table style="width:100%;">
+            <tbody>
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Name, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        @Html.Partial("_SelectedFoodTypeSelector")
+                        
+
+                    </td>
+                    <td style="width:20%;">
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Brand, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Brand, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Brand, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NewFoodItemType, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.NewFoodItemType, new { htmlAttributes = new { @class = "form-control", @id = "NewFoodTypeName" } })
+                                @Html.ValidationMessageFor(model => model.NewFoodItemType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Quantity, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Quantity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().TypeName, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().TypeName, new { htmlAttributes = new { @class = "form-control", @id = "FoodTypeName" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().TypeName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Unit, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Unit, new { htmlAttributes = new { @class = "form-control", @id = "MFPUnit" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Unit, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().Unit, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().Unit, new { htmlAttributes = new { @class = "form-control", @id = "Unit" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().Unit, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Calories, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Calories, new { htmlAttributes = new { @class = "form-control", @id = "MFPCalories" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Calories, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().Calories, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().Calories, new { htmlAttributes = new { @class = "form-control", @id = "Calories" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().Calories, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Carbs, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Carbs, new { htmlAttributes = new { @class = "form-control", @id = "MFPCarbs" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Carbs, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().Carbs, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().Carbs, new { htmlAttributes = new { @class = "form-control", @id = "Carbs" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().Carbs, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().CarbsDiff, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().CarbsDiff, new { htmlAttributes = new { @class = "form-control", @id = "CarbsDiff" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().CarbsDiff, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Fats, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Fats, new { htmlAttributes = new { @class = "form-control", @id = "MFPFats" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Fats, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().Fats, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().Fats, new { htmlAttributes = new { @class = "form-control", @id = "Fats" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().Fats, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().FatDiff, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().FatDiff, new { htmlAttributes = new { @class = "form-control", @id = "FatDiff" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().FatDiff, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Protein, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Protein, new { htmlAttributes = new { @class = "form-control", @id = "MFPProtein" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Protein, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().Protein, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().Protein, new { htmlAttributes = new { @class = "form-control", @id = "Protein" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().Protein, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().ProteinDiff, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().ProteinDiff, new { htmlAttributes = new { @class = "form-control", @id = "ProteinDiff" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().ProteinDiff, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.Fibre, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.Fibre, new { htmlAttributes = new { @class = "form-control", @id = "MFPFibre" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.Fibre, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GetFoodItemType().Fibre, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GetFoodItemType().Fibre, new { htmlAttributes = new { @class = "form-control", @id = "Fibre" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().Fibre, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                        <div class="form-group">
+                            @{
+                                var diffColor = "black";
+                                
+                                    diffColor = Model.FoodItemTypes.First().FibreDiff > 95 ? "green" : "orange";
+                                                        <div class="control-label col-md-4" style="color:@diffColor;">
+                                                            @Model.FoodItemTypes.First().FibreDiff
+                                                        </div>
+                                
+                                                        }
+
+                            @*@Html.LabelFor(model => model.FoodItem.GetFoodItemType().FibreDiff, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.FoodItem.GetFoodItemType().FibreDiff, new { htmlAttributes = new { @class = "form-control", @id = "FibreDiff" } })
+            @Html.ValidationMessageFor(model => model.FoodItem.GetFoodItemType().FibreDiff, "", new { @class = "text-danger" })
+        </div>*@
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        @Html.Partial("_SelectedCategorySelector")
+                        
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FoodItem.GlycemicIndex, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FoodItem.GlycemicIndex, new { htmlAttributes = new { @class = "form-control", @id = "GlycemicIndex" } })
+                                @Html.ValidationMessageFor(model => model.FoodItem.GlycemicIndex, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <td style="width:20%;" >
+                        
+                    </td>
+                    
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NewCategory, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.NewCategory, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.NewCategory, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:40%;">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-8">
+                                <input type="submit" value="Save" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:20%;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:40%;">
+                    </td>
+                    <td style="width:40%;">
+                    </td>
+                    <td style="width:20%;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+}
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+<script>
+
+    $(document).ready(function(){
+        UpdateType();
+        UpdateCategory();
+    });
+    
+    //need update category too !!
+
+    function UpdateCategory() {
+        
+        var c = $("#categoryId").val();
+        console.log(c + " c  UpdateType");
+        if (c === "") return;
+        if (c !== "") {
+            //get option at the top or selected
+            var opt = $('#categoriesList option:first').attr("id")
+            var name = $('#categoriesList option:first').attr("value");
+            $("#categoryId").attr("value", opt);
+            $("#searchCategories").val(name);
+            var score = $("#optionCat_" + opt).val();
+            console.log("score = " + score);
+            $("#catScore").text("Score : " + score);
+        }
+    }
+
+    function UpdateType() {
+        var t = $("#typeId").val();        
+        var c = $("#categoryId").val();
+        console.log(c + " c  UpdateType");
+        console.log(t + " t  UpdateType");
+        if (c === "") return;
+        if (t === "") return;
+        if (t !== "") {
+            $.post("@Url.Action("GetValues", "MfpDay")?typeId=" + t + "&foodId=4", function (res) {
+                if (res.Success === "true") {
+                    //set the value
+                    $("#typeId").val(res.Data.Id);
+                    $("#FoodTypeName").val(res.Data.TypeName);
+                    $("#Unit").val(res.Data.Unit);
+                    $("#Calories").val(res.Data.Calories);
+                    $("#Carbs").val(res.Data.Carbs);
+                    $("#Fats").val(res.Data.Fats);
+                    $("#Protein").val(res.Data.Protein);
+                    $("#Fibre").val(res.Data.Fibre);
+                    $("#GlycemicIndex").val(res.Data.GlycemicIndex);
+
+                    $("#CarbsDiff").val(res.Data.CarbsDiff);
+                    $("#FatDiff").val(res.Data.FatDiff);
+                    $("#ProteinDiff").val(res.Data.ProteinDiff);
+                    $("#FibreDiff").val(res.Data.FibreDiff);
+
+                    $("#searchTypes").val(res.Data.TypeName);
+                    
+                } else {
+                    alert("Error getting data!");
+                }
+            });
+        }
+    }
+
+    function NewFoodItemType() {
+        var num = $("#NewFoodTypeName").val().length;
+        if (num > 0) {
+            $("#FoodTypeName").prop('disabled', true);
+            $("#Unit").prop('disabled', true);
+            $("#Calories").prop('disabled', true);
+            $("#Carbs").prop('disabled', true);
+            $("#Fats").prop('disabled', true);
+            $("#Protein").prop('disabled', true);
+            $("#Fibre").prop('disabled', true);
+            $("#GlycemicIndex").val("");
+
+            $("#FoodTypeName").val($("#NewFoodTypeName").val());
+            $("#Unit").val($("#MFPUnit").val());
+            $("#Calories").val($("#MFPCalories").val());
+            $("#Carbs").val($("#MFPCarbs").val());
+            $("#Fats").val($("#MFPFats").val());
+            $("#Protein").val($("#MFPProtein").val());
+            $("#Fibre").val($("#MFPFibre").val());
+
+            $("a[id='GlycemicLink']").prop("href", "https://foodstruct.com/food/" + $("#FoodTypeName").val());
+            $("a[id='GlycemicLink']").html("FoodStruct + " + $("#FoodTypeName").val());
+        }
+        else {
+            $("#FoodTypeName").prop('disabled', false);
+            $("#Unit").prop('disabled', false);
+            $("#Calories").prop('disabled', false);
+            $("#Carbs").prop('disabled', false);
+            $("#Fats").prop('disabled', false);
+            $("#Protein").prop('disabled', false);
+            $("#Fibre").prop('disabled', false);
+            UpdateType();
+        }
+    }
+    $("#SelectedFoodItemType").change(UpdateType);
+    $("#NewFoodTypeName").change(NewFoodItemType);
+
+</script>

@@ -1,0 +1,123 @@
+﻿@model IEnumerable<FoodDatabase.Models.FoodItems.FoodItemViewModel>
+
+
+@{
+    int mealId = @Model != null ? Model.First().MealId : -1;
+    string showMealButton = "showMealButton_" + mealId;
+    double glyTotal = 0;
+}
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+
+<script>
+    function DateChanged() {
+        document.getElementById("dateSelector").submit();
+    }
+
+    function ToggleMeal(val) {
+        $(".mealRow_" + val).toggle();
+    };
+</script>
+<link href="~/Content/FoodItemTables.css" rel="stylesheet" />
+
+@if (Model.Count() > 0)
+{
+    <p>
+        Some Info : This is some info
+    </p>
+    <table class="table">
+        <tr>
+            <th class="name headings">
+                Brand / Name
+            </th>
+            <th class="headings unit">
+                Unit
+            </th>
+            <th class="headings quantity">
+                Qty
+            </th>
+            <th class="headings calories">
+                Cals
+            </th>
+            <th class="headings carbs">
+                Carbs
+            </th>
+            <th class="headings fats">
+                Fat
+            </th>
+            <th class="headings protein">
+                Pro
+            </th>
+            <th class="headings fibre">
+                Fibre
+            </th>
+            <th class="headings glycemicIndex">
+                GI
+            </th>
+            <th class="headings foodCategory">
+                Category
+            </th>
+            <th class="headings typeName">
+                Type
+            </th>
+            <th class="headings controls">
+                <input type="button" id="@showMealButton" value="Show" onclick="ToggleMeal(@mealId);" width="20" />
+            </th>
+        </tr>
+
+        @foreach (FoodDatabase.Models.FoodItems.FoodItemViewModel item in Model)
+        {
+            string mealRow = "mealRow_" + mealId;
+            string foodItemId = mealId.ToString() + "_" + item.FoodItemMatch.Id.ToString();
+
+            <tr class="@mealRow" style="display:none;">
+                <td class="name foodItem" id="foodItemName_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItemMatch.Name)<span class="brand">, @Html.DisplayFor(modelItem => item.FoodItemMatch.Brand)</span>
+                </td>
+                <td class="unit FoodItemMatch" id="foodItemUnit_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Unit)
+                </td>
+                <td class="quantity FoodItemMatch" id="foodItemQuantity_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Quantity)
+                </td>
+                <td class="calories FoodItemMatch macros" id="foodItemCals_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Calories)
+                </td>
+                <td class="carbs FoodItemMatch macros" id="foodItemCarbs_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Carbs)
+                </td>
+                <td class="fats FoodItemMatch macros" id="foodItemFats_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Fats)
+                </td>
+                <td class="protein FoodItemMatch macros" id="foodItemProtein_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Protein)
+                </td>
+                <td class="fibre FoodItemMatch macros" id="foodItemFibre_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItem.Fibre)
+                </td>
+                <td class="glycemicIndex FoodItemMatch macros" id="foodItemGlycemicIndex_@foodItemId">
+                    @Html.DisplayFor(modelItem => item.FoodItemMatch.GlycemicIndex)
+                </td>
+                <td class="foodCategory FoodItemMatch">
+                    @Html.DisplayFor(modelItem => item.FoodItemMatch.GetCategory().FoodCategory)
+                </td>
+                <td class="typeName FoodItemMatch">
+                    @Html.DisplayFor(modelItem => item.FoodItemMatch.GetFoodItemType().TypeName)
+                </td>
+                <td class="controls FoodItemMatch">
+                    <input type="checkbox" class="foodItemSelect_@foodItemId" value="@foodItemId" checked="checked" />
+                </td>
+            </tr>
+            {
+                double carbsTotal = @Model.Select(x => x.FoodItem.Carbs).Sum();
+                double carbsPercent = (item.FoodItem.Carbs / carbsTotal);
+                double glycemicLoad = carbsPercent * item.FoodItemMatch.GlycemicIndex;
+                glyTotal += glycemicLoad;
+            }
+        }
+        @{
+            glyTotal = Math.Round(glyTotal * (@Model.Select(x => x.FoodItem.Carbs).Sum() - Model.Select(x => x.FoodItem.Fibre).Sum()) / 100, 0);
+        }
+        @Html.Partial("_MealOutput", new FoodDatabase.Models.MealOutput((int)mealId, Model))
+
+    </table>
+}

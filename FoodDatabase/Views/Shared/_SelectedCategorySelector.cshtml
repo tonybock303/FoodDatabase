@@ -1,0 +1,62 @@
+﻿@model FoodDatabase.Models.FoodItems.FoodItemViewModel
+
+<div class="form-group">
+
+    @Html.LabelFor(model => model.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        <input type="text" name="searchCategories" id="searchCategories" placeholder="Type Something" list="categoriesList" autocomplete="on" value="@Model.AllCategories[0].FoodCategory">
+        @Html.HiddenFor(model => model.SelectedCategory, htmlAttributes: new { @id = "categoryId", @value = Model.AllCategories[0].Id })
+
+        <datalist id="categoriesList">
+            @{
+                for (int i = 0; i < Model.AllCategories.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <option value="@Model.AllCategories[i].FoodCategory" id="@Model.AllCategories[i].Id" selected="selected" />
+                    }
+                    else
+                    {
+                        <option value="@Model.AllCategories[i].FoodCategory" id="@Model.AllCategories[i].Id" />
+                    }
+                    <input type="hidden" id="optionCat_@Model.AllCategories[i].Id" value="@Model.AllCategories[i].Score" />
+                }
+            }
+        </datalist>
+        @Html.ValidationMessageFor(model => model.SelectedCategory, "", new { @class = "text-danger" })
+        <div id="catScore">
+            Score : @Model.AllCategories.First().Score
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+<script>
+    $(document).ready(
+        function () {
+            var name = $("#searchCategories").val();
+            if (name != "") {
+                console.log("name = " + name);
+                var opt = $('categoriesList option[value="' + name + '"]').attr("id");
+                $("#categoryId").attr("value", opt);
+                $("#searchCategories").val(name);
+            }
+            if (document.createElement("datalist").options) {
+
+                $("#searchCategories").on("change", function (e) {
+                    var name = $(this).val();
+                    if (name === "") return;
+                    var opt = $('#categoriesList option[value="' + name + '"]').attr("id")
+                    console.log(opt + " _SelectedCategory...");
+                    $("#categoryId").attr("value", opt);
+                    $("#searchCategories").val(name);
+                    var score = $("#optionCat_" + opt).val();
+                    console.log("score = " + score);
+                    $("#catScore").text("Score : " + score);
+
+                    UpdateType();
+                });
+
+            }
+
+        });
+</script>

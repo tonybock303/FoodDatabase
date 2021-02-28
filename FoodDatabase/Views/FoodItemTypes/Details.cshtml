@@ -1,0 +1,129 @@
+﻿@model FoodDatabase.Models.FoodItemTypes.FoodItemTypeDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Food Item Type Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td width="100px">
+                        Macro Percent
+                    </td>
+                    <td width="100px">
+                        Avg Percent
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100px">
+                        @Html.DisplayNameFor(model => model.FoodItemType.TypeName)
+                    </td>
+                    <td width="100px">
+                        @Html.DisplayFor(model => model.FoodItemType.TypeName)
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.Unit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.Unit)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.Calories)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.Calories)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.Carbs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.Carbs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.CarbsPercent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.CarbsAveragePercent)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.Fats)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.Fats)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.FatsPercent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FatsAveragePercent)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.Protein)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.Protein)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.ProteinPercent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.ProteinAveragePercent)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.Fibre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.Fibre)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FoodItemType.GlycemicIndex)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FoodItemType.GlycemicIndex)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>        
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FoodItemType.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@Html.Partial("_FoodItems", Model.FoodItemsOfThisType)

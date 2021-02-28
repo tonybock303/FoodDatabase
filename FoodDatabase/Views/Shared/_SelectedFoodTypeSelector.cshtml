@@ -1,0 +1,60 @@
+﻿@model FoodDatabase.Models.FoodItems.FoodItemViewModel
+
+<div class="form-group">
+
+    @Html.LabelFor(model => model.SelectedFoodItemType, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        <input type="text" name="searchTypes" id="searchTypes" placeholder="Type Something" list="foodItemTypesList" autocomplete="on" value="@Model.FoodItemTypes[0].TypeName">
+        @Html.HiddenFor(model => model.SelectedFoodItemType, htmlAttributes: new { @id = "typeId", @value = Model.FoodItemTypes[0].Id })
+
+        <datalist id="foodItemTypesList">
+            @{
+                for (int i = 0; i < Model.FoodItemTypes.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <option value="@Model.FoodItemTypes[i].TypeName" id="@Model.FoodItemTypes[i].Id" selected="selected" />
+                    }
+                    else
+                    {
+                        <option value="@Model.FoodItemTypes[i].TypeName" id="@Model.FoodItemTypes[i].Id" />
+                    }
+                    <input type="hidden" id="option_@Model.FoodItemTypes[i].Id" value="@Model.FoodItemTypes[i].Score" />
+                }
+            }
+        </datalist>
+        @Html.ValidationMessageFor(model => model.SelectedFoodItemType, "", new { @class = "text-danger" })
+        <div id="typeScore">
+            Score : @Model.FoodItemTypes.First().Score
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+<script>
+    $(document).ready(
+        function () {
+            var name = $("#searchTypes").val();
+            if (name != "") {
+                var opt = $('option[value="' + name + '"]').attr("id");
+                $("#typeId").attr("value", opt);
+                $("#searchTypes").val(name);
+            }
+            if (document.createElement("datalist").options) {
+
+                $("#searchTypes").on("change", function (e) {
+                    var name = $(this).val();
+                    if (name === "") return;
+                    var opt = $('#foodItemTypesList option[value="' + name + '"]').attr("id");
+                    console.log(opt + " _SelectedType...");
+                    $("#typeId").attr("value", opt);
+                    $("#searchTypes").val(name);
+                    var score = $("#option_" + opt).val();
+                    console.log("score = " + score);
+                    $("#typeScore").text("Score : " + score);
+
+                    UpdateType();
+                });
+            }
+
+        });
+</script>

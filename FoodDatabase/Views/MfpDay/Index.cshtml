@@ -1,0 +1,179 @@
+﻿@model FoodDatabase.Models.MyFitnessPalDay.MfpDay
+@using FoodDatabase.Models
+
+@{
+    ViewBag.Title = "Index";
+    TempData.Keep();
+    MealOutput mealOutput = new MealOutput();
+}
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            todayBtn: 'linked'
+        })
+    });
+    function DateChanged() {
+        document.getElementById("dateSelector").submit();
+    }
+</script>
+
+<style>
+    table > tbody > tr > td {
+    }
+
+    .parsedLine {
+        font-size: 14px;
+    }
+
+    .matchedLine {
+        font-size: 10px;
+        color: green;
+        border-top: none !important;
+    }
+
+    .derivedLine {
+        font-size: 12px;
+        border-top: none !important;
+        color: red;
+    }
+
+    .controls {
+        font-size: 12px;
+        border-top: none !important;
+    }
+
+    .foodItemSelect {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+
+
+<h2>Unrecognised Items Found</h2>
+
+<form id="dateSelector" class="form-group" action="/MfpDay">
+    <div class="form-group row">
+
+        <div class="col-md-12">
+            @Html.TextBoxFor(model => model.SelectedDate, new { onchange = "DateChanged()", @type = "date", @class = "form-control datepicker", @Value = Model.SelectedDate.ToString("yyyy-MM-dd") })
+            @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</form>
+<hr />
+
+<table class="table" width="100%">
+    <tr>
+        <th class="name headings" style="width:150px">
+            Brand / Name
+        </th>
+        <th class="headings unit">
+            Unit
+        </th>
+        <th class="headings quantity">
+            Qty
+        </th>
+        <th class="headings calories">
+            Cals
+        </th>
+        <th class="headings carbs">
+            Carbs
+        </th>
+        <th class="headings fats">
+            Fat
+        </th>
+        <th class="headings protein">
+            Pro
+        </th>
+        <th class="headings fibre">
+            Fibre
+        </th>
+        <th class="headings glycemicIndex">
+            GI
+        </th>
+        <th class="headings foodCategory">
+            Category
+        </th>
+        <th class="headings typeName">
+            Type
+        </th>
+        <th class="headings controls">
+
+        </th>
+    </tr>
+
+    @foreach (var item in Model.All)
+    {
+        string formatChangeFoodItem = string.Empty;
+        var matched = item.FoodItemMatch.Name != null;
+        formatChangeFoodItem = matched ? "matchedLine" : "parsedLine";
+        string foodItemId = "0_" + item.FoodItemMatch.Id.ToString();
+        <tr>
+            <td class="@formatChangeFoodItem" id="foodItemBrand_@foodItemId">@item.FoodItem.Brand, @item.FoodItem.Name</td>
+            <td class="@formatChangeFoodItem" id="foodItemUnit_@foodItemId">@item.FoodItem.Unit</td>
+            <td class="@formatChangeFoodItem" id="foodItemQuantity_@foodItemId">@item.FoodItem.Quantity</td>
+            <td class="@formatChangeFoodItem" id="foodItemCals_@foodItemId">@item.FoodItem.Calories</td>
+            <td class="@formatChangeFoodItem" id="foodItemCarbs_@foodItemId">@item.FoodItem.Carbs</td>
+            <td class="@formatChangeFoodItem" id="foodItemFats_@foodItemId">@item.FoodItem.Fats</td>
+            <td class="@formatChangeFoodItem" id="foodItemProtein_@foodItemId">@item.FoodItem.Protein</td>
+            <td class="@formatChangeFoodItem" id="foodItemFibre_@foodItemId">@item.FoodItem.Fibre</td>
+            <td class="@formatChangeFoodItem" id="foodItemGlycemicIndex_@foodItemId">
+                @if (matched)
+                {
+                    @item.FoodItemMatch.GlycemicIndex
+                }
+            </td>
+            <td class="matchedLine">
+                @if (matched)
+                {@item.FoodItemMatch.GetCategory().FoodCategory}
+            </td>
+            <td class="matchedLine">
+                @if (matched)
+                {@item.FoodItemMatch.GetFoodItemType().TypeName}
+            </td>
+            <td class="controls">
+                @if (matched)
+                {
+                    <input type="checkbox" class="foodItemSelect_@foodItemId" value="@foodItemId" checked="checked" />
+                }
+            </td>
+        </tr>
+
+        if (!matched)
+        {
+            <tr>
+                <td class="derivedLine">@item.FoodItemTypes[0].TypeName</td>
+                <td class="derivedLine">@item.FoodItemTypes[0].Unit</td>
+                <td class="derivedLine"></td>
+                <td class="derivedLine">
+                    @{
+                        double qty = item.FoodItem.Calories / item.FoodItemTypes[0].Calories;
+                        @(Math.Round(item.FoodItemTypes[0].Calories * qty, 2));
+                    }
+                </td>
+                <td class="derivedLine">@{ @(Math.Round(@item.FoodItemTypes[0].Carbs * qty, 2)); } </td>
+                <td class="derivedLine">@{ @(Math.Round(@item.FoodItemTypes[0].Fats * qty, 2)); } </td>
+                <td class="derivedLine">@{ @(Math.Round(@item.FoodItemTypes[0].Protein * qty, 2)); } </td>
+                <td class="derivedLine">@{ @(Math.Round(@item.FoodItemTypes[0].Fibre * qty, 2)); } </td>
+                <td class="derivedLine"></td>
+                <td class="derivedLine">@item.AllCategories[0].FoodCategory - @item.AllCategories[0].Score</td>
+                <td class="derivedLine">@item.FoodItemTypes[0].TypeName - @item.FoodItemTypes[0].Score</td>
+
+                <td class="controls">
+                    @Html.ActionLink("Update", "Update", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    }
+    @Html.Partial("_MealOutput", new MealOutput(0, Model.All.Where(x => x.FoodItemMatch.Name != null)));
+
+</table>
+
+
+

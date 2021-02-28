@@ -1,0 +1,70 @@
+﻿@model FoodDatabase.Models.MyFitnessPalDay.MfpDay
+@using FoodDatabase.Controllers
+@using FoodDatabase.MfpSiteParser
+@{
+    ViewBag.Title = "DayDisplay";
+
+
+    //    ((MfpDayController)this.ViewContext.Controller).Worker(DateTime.Now);
+
+
+
+
+
+    //var temp = ViewBag.fj;
+    //BackgroundLoader bl = new BackgroundLoader();
+    //bl.Worker(Model.SelectedDate);
+    int i = 0;
+}
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+<script>
+    function DateChanged() {
+        document.getElementById("dateSelector").submit();
+    }
+</script>
+
+<div class="row">
+    <form id="dateSelector" class="form-group" action="/MfpDay">
+        <div class="form-group">
+            <div class="col-md-6">
+                <h2>Day Display</h2>
+            </div>
+            <div class="col-md-6" >
+                @Html.TextBoxFor(model => model.SelectedDate, new { onchange = "DateChanged()", @type = "date", @class = "form-control datepicker", @Value = Model.SelectedDate.ToString("yyyy-MM-dd") })
+                @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </form>
+</div>
+<br />
+@if (Model.meal1.Count() > 0)
+{
+
+    @Html.Partial("_MealDisplay", Model.meal1)
+}
+
+@if (Model.meal2.Count() > 0)
+{
+    @Html.Partial("_MealDisplay", Model.meal2)
+
+}
+@if (Model.meal3.Count() > 0)
+{
+    @Html.Partial("_MealDisplay", Model.meal3)
+
+}
+@if (Model.meal4.Count() > 0)
+{
+    @Html.Partial("_MealDisplay", Model.meal4)
+
+}
+@if (Model.meal5.Count() > 0)
+{
+    @Html.Partial("_MealDisplay", Model.meal5)
+
+}
+@if (Model.meal6.Count() > 0)
+{
+    @Html.Partial("_MealDisplay", Model.meal6)
+}
