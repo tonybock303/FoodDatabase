@@ -70,7 +70,7 @@ namespace FoodDatabase.Controllers
             MfpDay mfpDay = new MfpDay();
             await GetDate(selectedDateIsGood, mfpDay);
             //ThreadPool.QueueUserWorkItem(Worker, selectedDateIsGood );
-            
+            ViewBag.SelectedDate = selectedDateIsGood;
             TempData["MfpDay"] = mfpDay;
             TempData.Keep();
 
@@ -130,10 +130,18 @@ namespace FoodDatabase.Controllers
 
                 if (matches.Count == 1)
                 {
-                    model.FoodItemMatch = matches.First();
-                    if (model.FoodItem.OriginalQuantity < model.FoodItem.Quantity)
+                    var potentialMatch = matches.First();
+
+                    if (!model.FoodItem.CompareMacroPercent(potentialMatch, 5, 5, 5))
                     {
-                        model.FoodItem.SetAsOriginal();
+                        throw new ArgumentException();
+                    }
+                    model.FoodItemMatch = matches.First();
+
+                    if (model.FoodItemMatch.OriginalQuantity < model.FoodItem.Quantity)
+                    {
+                        model.FoodItemMatch.SetAsOriginal(model.FoodItem);
+                        db.SaveChanges();
                     }
                 }
                 if (matches.Count > 1)
@@ -220,23 +228,7 @@ namespace FoodDatabase.Controllers
             if (ModelState.IsValid)
             {
                 model.FoodItem.SetAsOriginal();
-                List<string> gramUnit = new List<string> { "g", "gram" };
-
-                foreach (string str in gramUnit)
-                {
-                    if (model.FoodItem.Unit.StartsWith(str))
-                    {
-                        model.FoodItem.Unit = "100g";
-                        model.FoodItem.Quantity = model.FoodItem.Quantity / 100;
-                    }
-                }
-                model.FoodItem.Calories = Math.Round(model.FoodItem.Calories / model.FoodItem.Quantity, 2);
-                model.FoodItem.Carbs = Math.Round(model.FoodItem.Carbs / model.FoodItem.Quantity, 2);
-                model.FoodItem.Fats = Math.Round(model.FoodItem.Fats / model.FoodItem.Quantity, 2);
-                model.FoodItem.Protein = Math.Round(model.FoodItem.Protein / model.FoodItem.Quantity, 2);
-                model.FoodItem.Fibre = Math.Round(model.FoodItem.Fibre / model.FoodItem.Quantity, 2);
-
-                model.FoodItem.Quantity = 1;
+                
 
                 if (string.IsNullOrEmpty(model.NewFoodItemType))
                 {

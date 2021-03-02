@@ -3,6 +3,7 @@ using FoodDatabase.Models.Categories;
 using FoodDatabase.Models.FoodItemTypes;
 using FoodDatabase.Data;
 using System;
+using System.Collections.Generic;
 
 namespace FoodDatabase.Models.FoodItems
 {
@@ -42,10 +43,47 @@ namespace FoodDatabase.Models.FoodItems
             OriginalFibre = Fibre;
             OriginalGlycemicIndex = GlycemicIndex;
             OriginalDateParsed = DateTime.Now;
+            NormalizeFromOriginal();
+        }
+        public void SetAsOriginal(FoodItem fi)
+        {
+            OriginalBrand = fi.Brand;
+            OriginalName = fi.Name;
+            OriginalUnit = fi.Unit;
+            OriginalQuantity = fi.Quantity;
+            OriginalCalories = fi.Calories;
+            OriginalCarbs = fi.Carbs;
+            OriginalFats = fi.Fats;
+            OriginalProtein = fi.Protein;
+            OriginalFibre = fi.Fibre;
+            OriginalGlycemicIndex = fi.GlycemicIndex;
+            OriginalDateParsed = DateTime.Now;
+            NormalizeFromOriginal();
         }
         public FoodItem()
         {
 
+        }
+        private void NormalizeFromOriginal()
+        {
+            System.Console.Beep();
+            List<string> gramUnit = new List<string> { "g", "gram" };
+
+            foreach (string str in gramUnit)
+            {
+                if (Unit.StartsWith(str))
+                {
+                    Unit = "100g";
+                    Quantity = Quantity / 100;
+                }
+            }
+            Calories = Math.Round(Calories / Quantity, 2);
+            Carbs = Math.Round(Carbs / Quantity, 2);
+            Fats = Math.Round(Fats / Quantity, 2);
+            Protein = Math.Round(Protein / Quantity, 2);
+            Fibre = Math.Round(Fibre / Quantity, 2);
+
+            Quantity = 1;
         }
         public Category GetCategory()
         {
@@ -76,6 +114,26 @@ namespace FoodDatabase.Models.FoodItems
         public void SetCategory(int id)
         {
             Category_Id = id;
+        }
+
+        public bool CompareMacroPercent(FoodItem foodItemToCompare, int carbsPlusOrMinus, int fatsPlusOrMinus, int proteinPlusOrMinus)
+        {
+            if (Calories < 70)
+            {
+                return true;
+            }
+            double carbs = foodItemToCompare.CarbsPercent - CarbsPercent;
+            double fats = foodItemToCompare.FatsPercent - FatsPercent;
+            double protein = foodItemToCompare.ProteinPercent - ProteinPercent;
+            carbs = carbs < 0 ? carbs * -1 : carbs;
+            fats = fats < 0 ? fats * -1 : fats;
+            protein = protein < 0 ? protein * -1 : protein;
+            bool success = (carbs < carbsPlusOrMinus && fats < fatsPlusOrMinus && protein < proteinPlusOrMinus);
+            if (!success)
+            {
+                int i = 0;
+            }
+            return success;
         }
     }
 }

@@ -35,7 +35,7 @@
         <th>
             @Html.DisplayNameFor(model => model.GlycemicIndex)
         </th>
-        <th></th>
+        <th>Food Items</th>
     </tr>
 
 @foreach (var item in Model) {
@@ -63,6 +63,10 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.GlycemicIndex)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.FoodItemCount)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

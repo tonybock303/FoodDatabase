@@ -3,31 +3,7 @@
 @{
     ViewBag.Title = "DayDisplay";
 }
-<script src="~/Scripts/jquery-ui.js"></script>
-<script src="~/Scripts/jquery-3.5.1.js"></script>
-<script>
-    function DateChanged() {
-        document.getElementById("dateSelector").submit();
-    }
-</script>
-
-<div class="row">
-    <form id="dateSelector" class="form-group" action="/MfpDay">
-        <div class="form-group">
-            <div class="col-md-6">
-                <h2>Day Display</h2>
-            </div>
-            @{
-                string url = "/?id=" + Model.SelectedDate.ToString("yyyy-MM-dd");
-                <input type="button" value="Back" onclick="window.location.href='@url';" />
-            }
-            <div class="col-md-6">
-                @Html.TextBoxFor(model => model.SelectedDate, new { onchange = "DateChanged()", @type = "date", @class = "form-control datepicker", @Value = Model.SelectedDate.ToString("yyyy-MM-dd") })
-                @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </form>
-</div>
+@Html.Partial("_Calendar")
 <br />
 @if (Model.meal1.Count() > 0)
 {

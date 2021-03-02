@@ -326,8 +326,6 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-
-
 }
 <script src="~/Scripts/jquery-3.5.1.js"></script>
 <script>
@@ -339,8 +337,7 @@
     
     //need update category too !!
 
-    function UpdateCategory() {
-        
+    function UpdateCategory() {        
         var c = $("#categoryId").val();
         console.log(c + " c  UpdateType");
         if (c === "") return;

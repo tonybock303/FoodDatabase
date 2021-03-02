@@ -44,5 +44,6 @@ namespace FoodDatabase.Models
         {
             return (int)Math.Round((Protein * 4) / Calories * 100, 0);
         }
+        
     }
 }

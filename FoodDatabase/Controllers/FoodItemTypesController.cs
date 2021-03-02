@@ -13,15 +13,8 @@ namespace FoodDatabase.Controllers
         // GET: FoodItemTypes
         public ActionResult Index()
         {
-            var foodItemType = db.FoodItemTypes.ToList();
-
-            //FoodItemTypeViewModel fitvm = (FoodItemTypeViewModel)foodItemTypes;
-            //get number of items and categories
-
-            //add props in view model
-
-            // add fields im view
-            return View(foodItemType);
+            var model = db.FoodItemTypes.ToList();
+            return View(model);
         }
 
 
@@ -30,15 +23,15 @@ namespace FoodDatabase.Controllers
         {
             if (id == null)
             {
-                return View("Index");
+                return RedirectToAction("Index");
             }
             FoodItemType foodItemType = db.FoodItemTypes.Find(id);
             if (foodItemType == null)
             {
                 return HttpNotFound();
             }
-            //FoodItemTypeDetailsViewModel model = new FoodItemTypeDetailsViewModel(foodItemType);
-            return View();
+            FoodItemTypeDetailsViewModel model = new FoodItemTypeDetailsViewModel(foodItemType);
+            return View(model);
         }
 
         // GET: FoodItemTypes/Create

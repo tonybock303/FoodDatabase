@@ -229,6 +229,7 @@
     <Content Include="Views\Shared\_MealOutput.cshtml" />
     <Content Include="Views\Shared\_MealDisplay.cshtml" />
     <Content Include="Views\MfpDay\DayDisplay.cshtml" />
+    <Content Include="Views\Shared\_Calendar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

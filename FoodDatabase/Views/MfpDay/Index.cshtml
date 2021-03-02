@@ -6,22 +6,6 @@
     TempData.Keep();
     MealOutput mealOutput = new MealOutput();
 }
-<script src="~/Scripts/jquery-ui.js"></script>
-<script src="~/Scripts/jquery-3.5.1.js"></script>
-
-<script>
-    $(function () {
-        $(".datepicker").datepicker({
-            format: 'dd/mm/yyyy',
-            todayHighlight: true,
-            autoclose: true,
-            todayBtn: 'linked'
-        })
-    });
-    function DateChanged() {
-        document.getElementById("dateSelector").submit();
-    }
-</script>
 
 <style>
     table > tbody > tr > td {
@@ -54,18 +38,9 @@
     }
 </style>
 
-
 <h2>Unrecognised Items Found</h2>
 
-<form id="dateSelector" class="form-group" action="/MfpDay">
-    <div class="form-group row">
-
-        <div class="col-md-12">
-            @Html.TextBoxFor(model => model.SelectedDate, new { onchange = "DateChanged()", @type = "date", @class = "form-control datepicker", @Value = Model.SelectedDate.ToString("yyyy-MM-dd") })
-            @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-</form>
+@Html.Partial("_Calendar")
 <hr />
 
 <table class="table" width="100%">

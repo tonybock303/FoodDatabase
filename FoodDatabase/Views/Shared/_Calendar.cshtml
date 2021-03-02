@@ -1,0 +1,40 @@
+﻿@model FoodDatabase.Models.MyFitnessPalDay.MfpDay
+
+@{
+    string backUrl = "?SelectedDate=" + Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd");
+    string forwardUrl = "?SelectedDate=" + Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd");
+}
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script>
+    $(document).ready(function () {    
+        $(".datepicker").datepicker({
+            format: 'ddd dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            todayBtn: 'linked'
+        });    
+    function DateChanged() {
+        document.getElementById("dateSelector").submit();
+        }
+    });
+</script>
+<style>
+    .datepicker {
+        margin-bottom: 0px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-3">
+        <input type="button" value="Back" onclick="window.location.href='@backUrl';" />
+    </div>
+    <div class="col-md-6">
+        <form id="dateSelector" class="form-group" action="/MfpDay">
+            <input type="date" class="form-control datepicker" Value="@Model.SelectedDate.ToString("yyyy-MM-dd")" onchange="DateChanged();"/>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <input type="button" value="Forward" onclick="window.location.href='@forwardUrl';" />
+    </div>
+</div>
