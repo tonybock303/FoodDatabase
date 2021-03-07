@@ -24,14 +24,25 @@ namespace FoodDatabase.MfpSiteParser
         public static async Task<MfpDay> Parse(string website, MfpDay day)
         {
             HttpClient http = new HttpClient();
-            var response = await http.GetByteArrayAsync(website);
-            String source = Encoding.GetEncoding("utf-8").GetString(response, 0, response.Length - 1);
-            source = WebUtility.HtmlDecode(source);
             HtmlDocument resultat = new HtmlDocument();
-            resultat.LoadHtml(source);
+            String source;
+            try
+            {
+                var response = await http.GetByteArrayAsync(website);
+                source = Encoding.GetEncoding("utf-8").GetString(response, 0, response.Length - 1);
+                source = WebUtility.HtmlDecode(source);
+                resultat.LoadHtml(source);
+            }
+            catch
+            {
+                string date = day.SelectedDate.ToString("yyyy-MM-dd");
+                MyFitnessPalDay mfpd = db.MyFitnessPalDays.FirstOrDefault(x => x.DateOfPage.ToString("yyyy-MM-dd") == date);
+                if (mfpd == null) throw new HttpException();
+                source = mfpd.Html;
+            }
 
             day.Htlm = source;
-            
+
 
             List<HtmlNode> toftitle = resultat.DocumentNode.Descendants().Where
                     (x => (x.Name == "td" && x.Attributes["class"] != null && x.Attributes["class"].Value.Contains("first alt"))).ToList();
@@ -210,7 +221,7 @@ namespace FoodDatabase.MfpSiteParser
                     Fibre = t.Fibre,
                     FibreDiff = t.FibreDiff,
                     GlycemicIndex = t.GlycemicIndex,
-                    Unit = t.Unit                    
+                    Unit = t.Unit
                 };
 
                 newFit.Score = GetTypeScore(item, t);
@@ -259,7 +270,7 @@ namespace FoodDatabase.MfpSiteParser
             // As a whole
             threshold = 0.3;
             score += CompareAllFields(proDiff, carbDiff, fatDiff, fibreDiff, threshold);
-            
+
             return score;
         }
 
@@ -303,13 +314,13 @@ namespace FoodDatabase.MfpSiteParser
                 dacat.Score = cat.Score;
                 categoriesScored.Add(dacat);
             }
-            categoriesScored= categoriesScored.OrderByDescending(x => x.Score).ToList();
+            categoriesScored = categoriesScored.OrderByDescending(x => x.Score).ToList();
             return categoriesScored;
         }
 
         private static Category GetCategoryScore(FoodItem foodItem, Category category, List<FoodItemType> types)
         {
-            var suggestedTypes = types.GetRange(0,1);
+            var suggestedTypes = types.GetRange(0, 1);
             int score = 0;
 
             foreach (FoodItemType suggestedType in suggestedTypes)
@@ -331,7 +342,7 @@ namespace FoodDatabase.MfpSiteParser
                             {
                                 if (prod.Name.ToLower().Contains(str))
                                 {
-                                    score+=2;
+                                    score += 2;
                                 }
                             }
                         }
@@ -354,9 +365,30 @@ namespace FoodDatabase.MfpSiteParser
 
                 if (foodItem.Name.ToLower().Contains(category.FoodCategory.ToLower()))
                 {
-                    score+=2;
+                    score += 2;
                 }
                 if (foodItem.Brand.ToLower().Contains(category.FoodCategory.ToLower()))
+                {
+                    score++;
+                }
+            }
+            var foodItemsInCat = db.FoodItems.Where(x => x.Category_Id == category.Id).ToList();
+            List<string> topFoodItemTypeWordInCategory = new List<string>();
+
+            var foodItemTypesInCat = foodItemsInCat.Select(x => x.GetFoodItemType()).ToList();
+            foreach (FoodItemType fit in foodItemTypesInCat)
+            {
+                foreach (string str in fit.GetTopWords(3, 2, fit.Id).ToList())
+                {
+                    if (!topFoodItemTypeWordInCategory.Contains(str))
+                    {
+                        topFoodItemTypeWordInCategory.Add(str);
+                    }
+                }
+            }
+            foreach (string str in topFoodItemTypeWordInCategory)
+            {
+                if (foodItem.Name.ToLower().Contains(str.ToLower()))
                 {
                     score++;
                 }

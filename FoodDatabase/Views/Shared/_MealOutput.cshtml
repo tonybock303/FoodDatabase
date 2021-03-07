@@ -6,9 +6,10 @@
         border-top: 2px double pink !important;
         background-color: lightcyan;
     }
+
     .totals {
         width: 30px;
-        text-align:center;
+        text-align: center;
         vertical-align: middle;
         font-size: large;
     }
@@ -18,47 +19,51 @@
         font-size: x-large;
     }
 </style>
-
-<tr class="bottomRow">
-    <td class="theTotal name">
-        <span>Total</span>
-    </td>
-    <td class="totals unit" id="unitTotal_@Model.Id"></td>
-    <td class="totals quantity" id="quantityTotal_@Model.Id"></td>
-    <td class="totals calories" id="caloriesTotal_@Model.Id">
-        @Html.DisplayFor(model => model.Calories)
-    </td>
-    <td class="totals carbs" id="carbsTotal_@Model.Id">
-        @Html.DisplayFor(model => model.Carbs)
-    </td>
-    <td class="totals fats" id="fatsTotal_@Model.Id">
-        @Html.DisplayFor(model => model.Fats)
-    </td>
-    <td class="totals protein" id="proteinTotal_@Model.Id">
-        @Html.DisplayFor(model => model.Protein)
-    </td>
-    <td class="totals fibre" id="fibreTotal_@Model.Id">
-        @Html.DisplayFor(model => model.Fibre)
-    </td>
-    <td class="totals glycemicIndex" id="glycemicIndexTotal_@Model.Id">
-        @Html.DisplayFor(model => model.GlycemicLoad)
-    </td>
-    <td class="totals foodCategory"></td>
-    <td class="totals typeName"></td>
-    <td class="totals controls"></td>
-</tr>
+@if (Model.Calories > 0)
+{
+    <tr class="bottomRow">
+        <td class="theTotal name">
+            <span>Total</span>
+        </td>
+        <td class="totals unit" id="unitTotal_@Model.Id"></td>
+        <td class="totals quantity" id="quantityTotal_@Model.Id"></td>
+        <td class="totals calories" id="caloriesTotal_@Model.Id">
+            @Html.DisplayFor(model => model.Calories)
+        </td>
+        <td class="totals carbs" id="carbsTotal_@Model.Id">
+            @Html.DisplayFor(model => model.Carbs)
+        </td>
+        <td class="totals fats" id="fatsTotal_@Model.Id">
+            @Html.DisplayFor(model => model.Fats)
+        </td>
+        <td class="totals protein" id="proteinTotal_@Model.Id">
+            @Html.DisplayFor(model => model.Protein)
+        </td>
+        <td class="totals fibre" id="fibreTotal_@Model.Id">
+            @Html.DisplayFor(model => model.Fibre)
+        </td>
+        <td class="totals glycemicIndex" id="glycemicIndexTotal_@Model.Id">
+            @Html.DisplayFor(model => model.GlycemicLoad)
+        </td>
+        <td class="totals foodCategory"></td>
+        <td class="totals typeName">
+            @*<input type="button" value="copy" onclick="@{clipboardData.setData('Text', 'Hello')}" />*@
+        </td>
+        <td class="totals controls"></td>
+    </tr>
+}
 <script src="~/Scripts/jquery-ui.js"></script>
 <script src="~/Scripts/jquery-3.5.1.js"></script>
 <script>
     $(document).ready(function () {
         var allCheckboxes = $("[class^=foodItemSelect]");
-        
+
         allCheckboxes.each(function () {
             $(this).change(function () {
-                
+
                 var meal = $(this).val().split('_')[0];
                 var checkboxes = $("[class^=foodItemSelect_" + meal + "]:checked");
-                
+
                 var calTotal = 0;
                 var carbTotal = 0;
                 var fatTotal = 0;
@@ -76,7 +81,7 @@
                     proTotal = proTotal + parseFloat($("#foodItemProtein_" + checkboxValue).text());
                     fibTotal = fibTotal + parseFloat($("#foodItemFibre_" + checkboxValue).text());
                 }
-                
+
                 var carbGly = 0;
                 for (var i = 0; i < checkboxes.length; i++) {
                     var checkboxValue = checkboxes[i].value;
@@ -86,6 +91,7 @@
                 var netCarbs = carbTotal - fibTotal;
 
                 glyTotal = (glyTotal * netCarbs / 100).toFixed(0);
+                
                 console.log("gly total = " + glyTotal);
                 console.log("carb total = " + carbTotal);
                 console.log("net carbs = " + netCarbs);
@@ -98,4 +104,28 @@
             });
         });
     });
+
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+
+        // Avoid scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
 </script>

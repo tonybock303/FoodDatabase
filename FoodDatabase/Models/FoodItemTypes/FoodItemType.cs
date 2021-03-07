@@ -1,4 +1,5 @@
 ﻿using FoodDatabase.Data;
+using FoodDatabase.Models.FoodItems;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,6 +34,33 @@ namespace FoodDatabase.Models.FoodItemTypes
         public int GetFoodItemCount()
         {
             return db.FoodItems.Where(x => x.FoodItemType_Id == Id).Count();
+        }
+        public List<string> GetTopWords(int count, int minWordLength, int foodItemTypeId)
+        {
+            var foodItemsOfThisType = db.FoodItems.Where(x => x.FoodItemType_Id == foodItemTypeId).ToList();
+            List<string> wordList = new List<string>();
+
+            foreach (FoodItem fi in foodItemsOfThisType)
+            {
+                wordList.AddRange(fi.Name.ToLower().Split(' ').Where(x => x.Length > minWordLength));
+                if (fi.Brand != null)
+                {
+                    wordList.AddRange(fi.Brand.ToLower().Split(' ').Where(x => x.Length > minWordLength));
+                }
+            }
+            Dictionary<string, int> wordsCounted = new Dictionary<string, int>();
+
+            foreach (string word in wordList.Distinct())
+            {
+                wordsCounted.Add(word, wordList.Where(x => x == word).Count());
+            }
+            wordList = wordsCounted.OrderByDescending(x => x.Value).Select(y => y.Key).ToList();
+
+            if (wordList.Count() >= count)
+            {
+                return wordList.GetRange(0, count);
+            }
+            return wordList;
         }
     }
 }

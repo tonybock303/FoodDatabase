@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Details";
-    var topWords = @Model.GetTopWords(7, 3);
+    var topWords = @Model.FoodItemType.GetTopWords(7, 3,Model.FoodItemType.Id);
     string firstWord = "";
     string secondWord = "";
     string thirdWord = "";

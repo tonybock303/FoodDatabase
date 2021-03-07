@@ -10,6 +10,7 @@ using System.Linq;
 using FoodDatabase.Data;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Threading;
 
 namespace FoodDatabase.Controllers
 {
@@ -39,6 +40,11 @@ namespace FoodDatabase.Controllers
                 d = d.AddDays(-1);
                 fj.Add(day);
             }
+            StoreDay(fj);
+        }
+
+        private static void StoreDay(List<MfpDay> fj)
+        {
             foreach (MfpDay day in fj)
             {
                 MyFitnessPalDay dayDb = db.MyFitnessPalDays.FirstOrDefault(x => x.DateOfPage == day.SelectedDate);
@@ -63,13 +69,14 @@ namespace FoodDatabase.Controllers
                 }
             }
         }
-        
+
         public async System.Threading.Tasks.Task<ActionResult> Index(string selectedDate)
         {
             DateTime selectedDateIsGood = InterogateDate(selectedDate);
-            MfpDay mfpDay = new MfpDay();
+            MfpDay mfpDay = new MfpDay() { SelectedDate = selectedDateIsGood };
             await GetDate(selectedDateIsGood, mfpDay);
-            //ThreadPool.QueueUserWorkItem(Worker, selectedDateIsGood );
+            //ThreadPool.QueueUserWorkItem(Worker, selectedDateIsGood);
+            
             ViewBag.SelectedDate = selectedDateIsGood;
             TempData["MfpDay"] = mfpDay;
             TempData.Keep();
@@ -132,11 +139,17 @@ namespace FoodDatabase.Controllers
                 {
                     var potentialMatch = matches.First();
 
-                    if (!model.FoodItem.CompareMacroPercent(potentialMatch, 5, 5, 5))
+                    if (!model.FoodItem.CompareMacroPercent(potentialMatch, 6, 6, 6))
                     {
                         throw new ArgumentException();
+                        // Matched item macros do not match
                     }
                     model.FoodItemMatch = matches.First();
+
+                    // not convinced
+
+                    model.FoodItem.Category_Id = model.FoodItemMatch.Category_Id;
+                    model.FoodItem.FoodItemType_Id = model.FoodItemMatch.FoodItemType_Id;
 
                     if (model.FoodItemMatch.OriginalQuantity < model.FoodItem.Quantity)
                     {

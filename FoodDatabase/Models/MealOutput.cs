@@ -56,6 +56,8 @@ namespace FoodDatabase.Models
             }
 
             GlycemicLoad = Math.Round((Carbs - Fibre) * glynum / 100, 0);
+            double v = double.IsNaN(GlycemicLoad) ? 0 : GlycemicLoad;
+            GlycemicLoad = v;
         }
 
         public MealOutput()

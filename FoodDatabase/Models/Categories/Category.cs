@@ -29,7 +29,7 @@ namespace FoodDatabase.Models.Categories
         {
             Id = id;
             FoodCategory = foodCategory;
-            FoodItemTypesIds = foodItemTypesIds;            
+            FoodItemTypesIds = foodItemTypesIds;                   
         }
 
         public List<FoodItemType> GetFoodItemTypes()
